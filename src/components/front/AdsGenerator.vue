@@ -1,17 +1,37 @@
 <template>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
+    rel="stylesheet"
+  />
 
-  <div class="container module_adsgen" 
-    v-loading.fullscreen.lock="loading" 
+  <div
+    class="container module_adsgen"
+    v-loading.fullscreen.lock="loading"
     element-loading-text="Cargando"
-    element-loading-background="rgba(0, 0, 0, 0.8)">
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+  >
     <!-- <canvas class="" ref="canvas" :width="canvasWidth" :height="canvasHeight"></canvas> -->
     <transition name="fade" mode="out-in">
       <div :key="step">
@@ -23,12 +43,35 @@
           <div class="space"></div>
           <h3>Marcas</h3>
           <div class="input-ads">
-              <span class="label">Selecciona una marca para crear la promoción</span>
+            <span class="label"
+              >Selecciona una marca para crear la promoción</span
+            >
             <div class="slide_select">
-              <label v-for="option in brandsOptions" :key="option.id" class="radio-container">
-                <input v-if="option.enable" name="brand" type="radio" :value="option.id" v-model="brandSelected" class="radio-input">
-                <img v-if="option.enable" :src="option.imageUrl" alt="Option" class="radio-image pointer" >
-                <img v-else :src="option.imageUrl" alt="Option" class="radio-image disable" >
+              <label
+                v-for="option in brandsOptions"
+                :key="option.id"
+                class="radio-container"
+              >
+                <input
+                  v-if="option.enable"
+                  name="brand"
+                  type="radio"
+                  :value="option.id"
+                  v-model="brandSelected"
+                  class="radio-input"
+                />
+                <img
+                  v-if="option.enable"
+                  :src="option.imageUrl"
+                  alt="Option"
+                  class="radio-image pointer"
+                />
+                <img
+                  v-else
+                  :src="option.imageUrl"
+                  alt="Option"
+                  class="radio-image disable"
+                />
               </label>
             </div>
           </div>
@@ -51,15 +94,22 @@
             </el-select>
           </div>   -->
           <div class="bottom">
-            <el-button class="btn btn-primary" v-if="isValid1" @click="nextStep">Continuar</el-button>
-            <el-button class="btn btn-primary btn-disabled" v-else @click="validateForm">Continuar</el-button>
+            <el-button class="btn btn-primary" v-if="isValid1" @click="nextStep"
+              >Continuar</el-button
+            >
+            <el-button
+              class="btn btn-primary btn-disabled"
+              v-else
+              @click="validateForm"
+              >Continuar</el-button
+            >
           </div>
         </div>
         <div class="container_ads" v-else-if="step === 2">
           <!-- Paso 2 -->
           <div class="header_step_2">
             <button class="btn btn-primary" @click="prevStep">Atrás</button>
-            <img :src="brandSelectedImg" alt="Option" class="radio-image">
+            <img :src="brandSelectedImg" alt="Option" class="radio-image" />
             <div class="block-30"></div>
           </div>
           <div class="space_min"></div>
@@ -69,12 +119,25 @@
           <div class="space_min"></div>
           <div class="input-ads">
             <span class="label">Nombre del punto de venta</span>
-            <el-input 
-              size="large" 
-              v-model="textCommerce" 
-              type="text" 
-              placeholder="Ingrese nombre" 
+            <el-input
+              size="large"
+              v-model="textCommerce"
+              type="text"
+              placeholder="Ingrese nombre"
               maxlength="33"
+              show-word-limit
+              clearable
+            />
+          </div>
+          <div class="input-ads">
+            <span class="label">Palabra de invitación</span>
+            <small>La palabra de invitación no debe ser mayor a 20 caracteres, ejemplo [Llevate, Compra, oferta]</small>
+            <el-input
+              size="large"
+              v-model="textTitle"
+              type="text"
+              placeholder="Ingrese palabra de inivtación"
+              maxlength="20"
               show-word-limit
               clearable
             />
@@ -102,7 +165,13 @@
             <div class="divider"></div>
             <div class="input-ads">
               <span class="label">Cantidad de unidades</span>
-              <el-input-number size="large" v-model="textPromo" :min="1" :max="99" style="width: 100%" />
+              <el-input-number
+                size="large"
+                v-model="textPromo"
+                :min="1"
+                :max="99"
+                style="width: 100%"
+              />
             </div>
           </div>
           <div class="input-ads switch-value">
@@ -116,14 +185,16 @@
           <div v-if="unitValue" class="input-ads">
             <span class="label">¿Cuál es el precio?</span>
             <el-input
-                v-model="textPrice"
-                size="large"
-                placeholder="Ingresar precio"
-                :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
-                maxlength="8"
-                clearable
-              />
+              v-model="textPrice"
+              size="large"
+              placeholder="Ingresar precio"
+              :formatter="
+                (value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              "
+              :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+              maxlength="8"
+              clearable
+            />
           </div>
           <div v-else class="input-ads-group">
             <div class="input-ads">
@@ -138,7 +209,10 @@
                   v-model="textPriceNormal"
                   size="large"
                   placeholder="Ingresar precio anterior"
-                  :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                  :formatter="
+                    (value) =>
+                      `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  "
                   :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
                   maxlength="8"
                   clearable
@@ -158,7 +232,10 @@
                   v-model="textPricePromo"
                   size="large"
                   placeholder="Ingresar precio anterior"
-                  :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                  :formatter="
+                    (value) =>
+                      `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  "
                   :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
                   maxlength="8"
                   clearable
@@ -176,7 +253,11 @@
                 format="DD/MM/YYYY"
                 value-format="DD/MM/YYYY"
                 size="large"
-                style="width: 100%; border: 1px solid #a1a1a1; border-radius: 5px;"
+                style="
+                  width: 100%;
+                  border: 1px solid #a1a1a1;
+                  border-radius: 5px;
+                "
               />
             </div>
             <div class="divider"></div>
@@ -190,209 +271,259 @@
                 format="DD/MM/YYYY"
                 value-format="DD/MM/YYYY"
                 size="large"
-                style="width: 100%; border: 1px solid #a1a1a1; border-radius: 5px;"
+                style="
+                  width: 100%;
+                  border: 1px solid #a1a1a1;
+                  border-radius: 5px;
+                "
               />
             </div>
           </div>
           <div class="input-ads">
-            <span class="label">Seleccione el fondo para el post que más te guste</span>
+            <span class="label"
+              >Seleccione el fondo para el post que más te guste</span
+            >
             <div class="slide_select">
-              <label v-for="option in backgroundOptions" :key="option.id" class="radio-container">
-                <input name="brand" type="radio" :value="option.id" v-model="backgroundSelected" class="radio-input">
-                <img :src="option.imageUrl" alt="Option" class="radio-image m-1">
+              <label
+                v-for="option in backgroundOptions"
+                :key="option.id"
+                class="radio-container"
+              >
+                <input
+                  name="brand"
+                  type="radio"
+                  :value="option.id"
+                  v-model="backgroundSelected"
+                  class="radio-input"
+                />
+                <img
+                  :src="option.imageUrl"
+                  alt="Option"
+                  class="radio-image m-1"
+                />
               </label>
             </div>
           </div>
           <div class="bottom">
-            <el-button class="btn btn-primary" v-if="isValid2" @click="nextStep">Siguiente</el-button>
-            <el-button class="btn btn-primary btn-disabled" v-else @click="validateForm">Siguiente</el-button>
+            <el-button class="btn btn-primary" v-if="isValid2" @click="nextStep"
+              >Siguiente</el-button
+            >
+            <el-button
+              class="btn btn-primary btn-disabled"
+              v-else
+              @click="validateForm"
+              >Siguiente</el-button
+            >
           </div>
         </div>
         <div class="container_ads" v-else>
           <!-- Paso 3 -->
           <div class="header_step_2">
             <button class="btn btn-primary" @click="prevStep">Atrás</button>
-            <img :src="brandSelectedImg" alt="Option" class="radio-image">
+            <img :src="brandSelectedImg" alt="Option" class="radio-image" />
             <div class="block-30"></div>
           </div>
           <div class="space_min"></div>
           <h2 class="text-align-center">¡Listo!, Así se vería tu anuncio</h2>
           <div class="space_min"></div>
           <div class="content_image text-align-center">
-            <img :src="imageFinal" alt="Promotion generated from Module">
+            <img :src="imageFinal" alt="Promotion generated from Module" />
           </div>
           <div class="bottom">
-            <button class="btn btn-primary" @click="downloadImage">Descargar</button>
-            <button v-if="isMobile" class="btn btn-primary btn-shared" @click="shareImage">Compartir</button><br>
+            <button class="btn btn-primary" @click="downloadImage">
+              Descargar
+            </button>
+            <button
+              v-if="isMobile"
+              class="btn btn-primary btn-shared"
+              @click="shareImage"
+            >
+              Compartir</button
+            ><br />
           </div>
         </div>
       </div>
     </transition>
-    <br> <br>
+    <br />
+    <br />
     <div class="content_image">
-      <canvas class="" style="display: none" ref="canvas" :width="canvasWidth" :height="canvasHeight"></canvas>
+      <canvas
+        class=""
+        style="display: none"
+        ref="canvas"
+        :width="canvasWidth"
+        :height="canvasHeight"
+      ></canvas>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+@import url("https://centralganadores.test/themes/huellitas/assets/css/theme.css");
+@import url("https://centralganadores.test/modules/clop//views/css/front.css");
+@import url("https://centralganadores.test/themes/huellitas/assets/css/custom.css");
+@import url("https://centralganadores.test/themes/huellitas/assets/css/styles-bimbo-v1.css");
+// @import url('https://centraldeganadores.com/themes/huellitas/assets/css/theme.css');
+// @import url('https://centraldeganadores.com/modules/clop//views/css/front.css');
+// @import url('https://centraldeganadores.com/themes/huellitas/assets/css/custom.css');
+// @import url('https://centraldeganadores.com/themes/huellitas/assets/css/styles-bimbo-v1.css');
 
-  // @import url('https://centralganadores.test/themes/huellitas/assets/css/theme.css');
-  // @import url('https://centralganadores.test/modules/clop//views/css/front.css');
-  // @import url('https://centralganadores.test/themes/huellitas/assets/css/custom.css');
-  // @import url('https://centralganadores.test/themes/huellitas/assets/css/styles-bimbo-v1.css');
-  @import url('https://centraldeganadores.com/themes/huellitas/assets/css/theme.css');
-  @import url('https://centraldeganadores.com/modules/clop//views/css/front.css');
-  @import url('https://centraldeganadores.com/themes/huellitas/assets/css/custom.css');
-  @import url('https://centraldeganadores.com/themes/huellitas/assets/css/styles-bimbo-v1.css');
-
-
-  .module_adsgen {
-    span, p, h1, h2, h3 , h4, h5 {
-      color: #020e45;
-    }
-    .btn {
-      margin: 5px;
-    }
-    .btn-disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .btn-shared {
-      background-color: #137e2c;
-    }
-    .btn-shared:hover {
-      background-color: #FCDC3A;
-    }
-    .btn-primary:disabled {
-      background-color: #184783;
-    }
-    .container_ads {
-      padding: 5px 10%;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .space_min {
-      margin-top: 20px;
-    }
-    .space {
-      margin-top: 40px;
-    }
-    .content_image {
-      width: 100%;
-      img {
-        width: 290px;
-      }
-    }
-    .block-30 {
-      height: 30px;
-      width: 30px;
-    }
-    .header_step_2 {  
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .input-ads {
-      display: flex;
-      flex-direction: column;
-      margin: 15px 0;
-      width: 100%;
-      .label {
-        font-size: medium;
-        margin-bottom: 5px;
-      }
-      input, select {
-        padding: 10px;
-        border: 1px solid #a1a1a1;
-        border-radius: 5px;
-      }
-      .el-input {
-        border: 1px solid #a1a1a1;
-        border-radius: 5px;
-      }
-    }
-    .el-input__wrapper {
-      padding: 5px 11px;
-    }
-    .el-date-editor.el-input {
-      width: 100%;
-    }
-    .input-ads-group {
-      display: flex;
-      flex-direction: row;
-      .input-ads {
-        width: 48%;
-      }
-      .divider {
-        width: 4%;
-      }
-    }
-    .fade-enter-active, .fade-leave-active {
-      transition: opacity 0.5s;
-    }
-    .fade-enter, .fade-leave-to {
-      opacity: 0;
-    }
-    .radio-container {
-      display: inline-block;
-      margin-right: 10px;
-    }
-  
-    .radio-input {
-      display: none;
-    }
-  
-    .radio-image {
-      width: 100px;
-      border: 4px solid transparent;
-    }
-
-    .pointer {
-      cursor: pointer;
-    }
-
-    img.disable {
-      opacity: 0.5;
-      cursor: not-allowed;
-      filter: grayscale(1);
-    }
-  
-    .radio-input:checked + .radio-image {
-      border-color: #409eff;
-      border-radius: 10px;
-    }
-
-    .bottom {
-      text-align: center;
-      margin-top: 15px;
-    }
-  
-    .slide_select {
-      display: flex;
-      overflow-y: auto;
-      // @media screen and (min-width: 768px) {
-      //   justify-content: center;
-      //   width: 100%;
-      // }
-    }
-
-    .switch-value {
-      display: flex;
-      align-items: center;
+.module_adsgen {
+  span,
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    color: #020e45;
+  }
+  .btn {
+    margin: 5px;
+  }
+  .btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .btn-shared {
+    background-color: #137e2c;
+  }
+  .btn-shared:hover {
+    background-color: #fcdc3a;
+  }
+  .btn-primary:disabled {
+    background-color: #184783;
+  }
+  .container_ads {
+    padding: 5px 10%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .space_min {
+    margin-top: 20px;
+  }
+  .space {
+    margin-top: 40px;
+  }
+  .content_image {
+    width: 100%;
+    img {
+      width: 290px;
     }
   }
+  .block-30 {
+    height: 30px;
+    width: 30px;
+  }
+  .header_step_2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .input-ads {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    width: 100%;
+    .label {
+      font-size: medium;
+      margin-bottom: 5px;
+    }
+    input,
+    select {
+      padding: 10px;
+      border: 1px solid #a1a1a1;
+      border-radius: 5px;
+    }
+    .el-input {
+      border: 1px solid #a1a1a1;
+      border-radius: 5px;
+    }
+  }
+  .el-input__wrapper {
+    padding: 5px 11px;
+  }
+  .el-date-editor.el-input {
+    width: 100%;
+  }
+  .input-ads-group {
+    display: flex;
+    flex-direction: row;
+    .input-ads {
+      width: 48%;
+    }
+    .divider {
+      width: 4%;
+    }
+  }
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  .radio-container {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .radio-input {
+    display: none;
+  }
+
+  .radio-image {
+    width: 100px;
+    border: 4px solid transparent;
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
+
+  img.disable {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+  }
+
+  .radio-input:checked + .radio-image {
+    border-color: #409eff;
+    border-radius: 10px;
+  }
+
+  .bottom {
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .slide_select {
+    display: flex;
+    overflow-y: auto;
+    // @media screen and (min-width: 768px) {
+    //   justify-content: center;
+    //   width: 100%;
+    // }
+  }
+
+  .switch-value {
+    display: flex;
+    align-items: center;
+  }
+}
 </style>
 
 <script>
-import axios from 'axios';
-import { ElNotification } from 'element-plus'
+import axios from "axios";
+import { ElNotification } from "element-plus";
 
 export default {
   data() {
     return {
-      url_ajax: '',
-      // url_ajax: 'https://centraldeganadores.com',
+      // url_ajax: '',
+      // url_ajax: "https://centraldeganadores.com",
+      url_ajax: "https://centralganadores.test",
 
       loading: false,
 
@@ -403,50 +534,60 @@ export default {
 
       canvasWidth: 1080,
       canvasHeight: 1920,
-      textPrice: '',
-      textCommerce: '',
-      textPromo: '',
+      textTitle: "",
+      textPrice: "",
+      textCommerce: "",
+      textPromo: "",
       backgroundImage: "",
       step: 1,
-      imageFinal: '',
-      textPriceNormal: '',
-      textPricePromo: '',
+      imageFinal: "",
+      textPriceNormal: "",
+      textPricePromo: "",
 
-      dateStart: '',
-      dateEnd: '',
+      dateStart: "",
+      dateEnd: "",
 
-      promoSelected: '',
+      promoSelected: "",
       promoOptions: [
-        { id: 1, label: 'Promo 1', displayText: 'Promoción Unitaria' },
-        { id: 2, disabled: true, label: 'Promo 2', displayText: 'Promoción cubetazo' },
-        { id: 3, disabled: true, label: 'Promo 3', displayText: 'Promoción combo' },
+        { id: 1, label: "Promo 1", displayText: "Promoción Unitaria" },
+        {
+          id: 2,
+          disabled: true,
+          label: "Promo 2",
+          displayText: "Promoción cubetazo",
+        },
+        {
+          id: 3,
+          disabled: true,
+          label: "Promo 3",
+          displayText: "Promoción combo",
+        },
       ],
 
-      brandSelected: '',
-      brandSelectedImg: '',
+      brandSelected: "",
+      brandSelectedImg: "",
       brandsOptions: [],
 
-      typeProductSelected: '',
-      typeProductSelectedLabel: '',
-      typeProduct : [
-      ],
+      typeProductSelected: "",
+      typeProductSelectedLabel: "",
+      typeProduct: [],
 
       // Section Settings - Background
-      settingQty: '',
-      settingDescription: '',
-      settingPriceBeforeLabel: '',
-      settingPriceBeforeValue: '',
-      settingPriceAfterLabel: '',
-      settingPriceAfterValue: '',
-      settingPriceLabel: '',
-      settingPriceValue: '',
-      settingCommerce: '',
-      settingValidity: '',
+      settingTitle: "",
+      settingQty: "",
+      settingDescription: "",
+      settingPriceBeforeLabel: "",
+      settingPriceBeforeValue: "",
+      settingPriceAfterLabel: "",
+      settingPriceAfterValue: "",
+      settingPriceLabel: "",
+      settingPriceValue: "",
+      settingCommerce: "",
+      settingValidity: "",
       // Section Settings - Background
 
-      backgroundSelected: '',
-      backgroundOptions: [
-      ],
+      backgroundSelected: "",
+      backgroundOptions: [],
     };
   },
   mounted() {
@@ -458,62 +599,87 @@ export default {
       this.typeProductSelectedLabel = newValue.displayText;
     },
     brandSelected(newValue) {
-      const selected = this.brandsOptions.find(option => option.id === newValue);
+      const selected = this.brandsOptions.find(
+        (option) => option.id === newValue
+      );
       this.brandSelectedImg = selected.imageUrl;
       this.getDataBrand();
     },
     backgroundSelected(newValue) {
-      const selected = this.backgroundOptions.find(option => option.id === newValue);
+      const selected = this.backgroundOptions.find(
+        (option) => option.id === newValue
+      );
       this.backgroundImage = selected.imageUrl;
 
-      let data_props = JSON.parse(this.backgroundOptions.find(option => option.id == this.backgroundSelected).props);
-      // console.log(data_props);
-      this.settingQty = data_props.qty;
-      this.settingDescription = data_props.description_prod;
-      this.settingPriceBeforeLabel = data_props.price_before_label;
-      this.settingPriceBeforeValue = data_props.price_before_value;
-      this.settingPriceAfterLabel = data_props.price_after_label;
-      this.settingPriceAfterValue = data_props.price_after_value;
-      this.settingPriceLabel = data_props.price_label;
-      this.settingPriceValue = data_props.price_value;
-      this.settingCommerce = data_props.commerce;
-      this.settingValidity = data_props.validity_dates;
+      let data_props = JSON.parse(
+        this.backgroundOptions.find(
+          (option) => option.id == this.backgroundSelected
+        ).props
+      );
 
-      this.renderImage();
+      let isValidProps = this.validateDataProps(data_props);
+
+      if (isValidProps) {
+        this.settingTitle = data_props.title;
+        this.settingQty = data_props.qty;
+        this.settingDescription = data_props.description_prod;
+        this.settingPriceBeforeLabel = data_props.price_before_label;
+        this.settingPriceBeforeValue = data_props.price_before_value;
+        this.settingPriceAfterLabel = data_props.price_after_label;
+        this.settingPriceAfterValue = data_props.price_after_value;
+        this.settingPriceLabel = data_props.price_label;
+        this.settingPriceValue = data_props.price_value;
+        this.settingCommerce = data_props.commerce;
+        this.settingValidity = data_props.validity_dates;
+  
+        this.renderImage();
+      } else {
+        this.backgroundImage = "";
+        this.changeTypeProduct();
+      }
+      
     },
     // render watch
-    textCommerce: 'renderImage',
-    typeProductSelectedLabel: 'renderImage',
-    textPromo: 'renderImage',
-    textPrice: 'renderImage',
-    textPriceNormal: 'renderImage',
-    sizePrice: 'renderImage',
-    textPricePromo: 'renderImage',
-    dateStart: 'renderImage',
-    dateEnd: 'renderImage',
-    backgroundImage: 'renderImage',
-    
+    textTitle: "renderImage",
+    textCommerce: "renderImage",
+    typeProductSelectedLabel: "renderImage",
+    textPromo: "renderImage",
+    textPrice: "renderImage",
+    textPriceNormal: "renderImage",
+    sizePrice: "renderImage",
+    textPricePromo: "renderImage",
+    dateStart: "renderImage",
+    dateEnd: "renderImage",
+    backgroundImage: "renderImage",
+
     //Validate watch
-    brandSelectedImg: 'valdiateStep1',
-    promoSelected: 'valdiateStep1',
+    brandSelectedImg: "valdiateStep1",
+    promoSelected: "valdiateStep1",
   },
   methods: {
     renderImage() {
       const canvas = this.$refs.canvas;
-      const context = canvas.getContext('2d');
+      const context = canvas.getContext("2d");
       const imagen = new Image();
-      imagen.crossOrigin = 'Anonymous';
+      imagen.crossOrigin = "Anonymous";
       imagen.src = this.backgroundImage;
       imagen.onload = () => {
         canvas.width = this.canvasWidth;
         canvas.height = this.canvasHeight;
         context.drawImage(imagen, 0, 0);
-        
+
+        // Título
+        this.drawText(context, this.textTitle.toString(), this.settingTitle);
+
         // Numero de cantidad
         this.drawText(context, this.textPromo.toString(), this.settingQty);
-        
+
         // Descripción del producto
-        this.drawText(context, this.typeProductSelectedLabel, this.settingDescription);
+        this.drawText(
+          context,
+          this.typeProductSelectedLabel,
+          this.settingDescription
+        );
 
         // Precio de la promoción
         if (this.textPriceNormal && this.textPricePromo) {
@@ -521,19 +687,31 @@ export default {
           this.drawText(context, "Precio antes", this.settingPriceBeforeLabel);
 
           // Precio antes
-          this.drawText(context, this.formatCurrency(this.textPriceNormal), this.settingPriceBeforeValue);
+          this.drawText(
+            context,
+            this.formatCurrency(this.textPriceNormal),
+            this.settingPriceBeforeValue
+          );
 
           // Precio después label
           this.drawText(context, "Ahora", this.settingPriceAfterLabel);
 
           // Precio después
-          this.drawText(context, this.formatCurrency(this.textPricePromo), this.settingPriceAfterValue);
+          this.drawText(
+            context,
+            this.formatCurrency(this.textPricePromo),
+            this.settingPriceAfterValue
+          );
         } else {
           let text = "Por solo";
           this.drawText(context, text, this.settingPriceLabel);
 
           // Precio Unitario
-          this.drawText(context, this.formatCurrency(this.textPrice), this.settingPriceValue);
+          this.drawText(
+            context,
+            this.formatCurrency(this.textPrice),
+            this.settingPriceValue
+          );
         }
         // Lugar o establecimiento
         this.drawText(context, this.textCommerce, this.settingCommerce);
@@ -548,48 +726,68 @@ export default {
     },
     validateForm() {
       ElNotification({
-        title: 'Error',
-        message: 'Completar todos los campos',
-        type: 'error',
-      })
+        title: "Error",
+        message: "Completar todos los campos",
+        type: "error",
+      });
     },
     valdiateStep1() {
       if (this.step === 1) {
-        this.isValid1 = (
-          this.brandSelectedImg !== ''
+        this.isValid1 =
+          this.brandSelectedImg !== "";
           // &&  this.promoSelected !== ''
-        );
       }
     },
 
     valdiateStep2() {
-      
-      if (this.textPriceNormal !== '' && this.textPricePromo !== '') {
-        this.isValid2 = (
-          this.textCommerce !== '' && 
-          this.backgroundImage !== '' &&
-          this.typeProductSelectedLabel !== '' &&
+      if (this.textPriceNormal !== "" && this.textPricePromo !== "") {
+        this.isValid2 =
+          this.textTitle !== "" &&
+          this.textCommerce !== "" &&
+          this.backgroundImage !== "" &&
+          this.typeProductSelectedLabel !== "" &&
           this.dateStart !== null &&
           this.dateEnd !== null &&
           this.textPriceNormal.length > 2 &&
-          this.textPricePromo.length > 2
-        );
+          this.textPricePromo.length > 2;
       } else {
-        this.isValid2 = (
-          this.textCommerce !== '' && 
-          this.backgroundImage !== '' &&
-          this.typeProductSelectedLabel !== ''&&
+        this.isValid2 =
+          this.textTitle !== "" &&
+          this.textCommerce !== "" &&
+          this.backgroundImage !== "" &&
+          this.typeProductSelectedLabel !== "" &&
           this.dateStart !== null &&
           this.dateEnd !== null &&
-          this.textPrice !== '' &&
-          this.textPrice.length > 2
-        );
+          this.textPrice !== "" &&
+          this.textPrice.length > 2;
+      }
+    },
+
+    validateDataProps(props) {      
+      if (
+        props.title !== undefined &&
+        props.qty !== undefined &&
+        props.description_prod !== undefined &&
+        props.price_before_label !== undefined &&
+        props.price_before_value !== undefined &&
+        props.price_after_label !== undefined &&
+        props.price_after_value !== undefined &&
+        props.price_label !== undefined &&
+        props.price_value !== undefined 
+      ) {
+        return true;
+      } else {
+        ElNotification({
+          title: "Error",
+          message: "No es posible usar este producto.",
+          type: "error",
+        });
+        return false;
       }
     },
 
     changeTypeProduct() {
       this.getPropsBrand(this.typeProductSelected.id);
-
     },
 
     /**
@@ -625,13 +823,13 @@ export default {
         if (qytText < 16) {
           fontSize = 90;
           lineHeight = 80;
-        } else if(qytText >= 16 && qytText < 22) {
+        } else if (qytText >= 16 && qytText < 22) {
           fontSize = 80;
           lineHeight = 70;
-        } else if(qytText >= 22 && qytText < 28) {
+        } else if (qytText >= 22 && qytText < 28) {
           fontSize = 70;
           lineHeight = 60;
-        } else if(qytText >= 28 && qytText < 34) {
+        } else if (qytText >= 28 && qytText < 34) {
           fontSize = 60;
           lineHeight = 50;
         }
@@ -641,16 +839,16 @@ export default {
       context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
       context.fillStyle = color;
 
-      let words = text.split(' ');
-      let line = '';
+      let words = text.split(" ");
+      let line = "";
 
       for (let n = 0; n < words.length; n++) {
-        const testLine = line + words[n] + ' ';
+        const testLine = line + words[n] + " ";
         const metrics = context.measureText(testLine);
         const testWidth = metrics.width;
         if (testWidth > width && n > 0) {
           context.fillText(line, x, y);
-          line = words[n] + ' ';
+          line = words[n] + " ";
           y += lineHeight;
         } else {
           line = testLine;
@@ -658,8 +856,8 @@ export default {
       }
 
       context.fillText(line, x, y);
-      
-      if (decoration === 'line-through') {
+
+      if (decoration === "line-through") {
         context.moveTo(x, y - fontSize / 2.5); // Coloca la línea arriba del texto
         context.lineTo(x + context.measureText(line).width, y - fontSize / 2.5); // Coloca la línea al final del texto
         context.strokeStyle = color; // Usa el mismo color del texto
@@ -669,58 +867,62 @@ export default {
     },
     formatCurrency(number) {
       number = parseInt(number);
-      if (typeof number !== 'number' || isNaN(number)) {
-        return '$';
+      if (typeof number !== "number" || isNaN(number)) {
+        return "$";
       }
 
       // Formatear el número como moneda con separadores de miles y el símbolo de moneda $
-      const valueFormat = number.toLocaleString('es-CO', {
-        style: 'currency',
-        currency: 'COP',
-        minimumFractionDigits: 0
+      const valueFormat = number.toLocaleString("es-CO", {
+        style: "currency",
+        currency: "COP",
+        minimumFractionDigits: 0,
       });
 
       return valueFormat;
     },
     downloadImage() {
       const canvas = this.$refs.canvas;
-      const enlace = document.createElement('a');
-      enlace.download = 'Promo-Render.jpg';
-      enlace.href = canvas.toDataURL('image/jpeg', 1);
+      const enlace = document.createElement("a");
+      enlace.download = "Promo-Render.jpg";
+      enlace.href = canvas.toDataURL("image/jpeg", 1);
       enlace.click();
     },
 
     async shareImage() {
       const canvas = this.$refs.canvas;
-      
+
       if (navigator.share) {
         try {
           // Convertir el canvas a un Blob
-          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 1));
-          const file = new File([blob], 'Promo-Render.jpg', { type: 'image/jpeg' });
+          const blob = await new Promise((resolve) =>
+            canvas.toBlob(resolve, "image/jpeg", 1)
+          );
+          const file = new File([blob], "Promo-Render.jpg", {
+            type: "image/jpeg",
+          });
 
           await navigator.share({
             files: [file],
-            title: 'Mi Imagen',
-            text: '¡Mira esta imagen!'
+            title: "Mi Imagen",
+            text: "¡Mira esta imagen!",
           });
           ElNotification({
-            title: 'Exito',
-            message: 'Imagen compartida exitosamente',
-            type: 'success',
+            title: "Exito",
+            message: "Imagen compartida exitosamente",
+            type: "success",
           });
         } catch (error) {
           ElNotification({
-            title: 'Error',
-            message: 'Error al compartir',
-            type: 'error',
+            title: "Error",
+            message: "Error al compartir",
+            type: "error",
           });
         }
       } else {
         ElNotification({
-          title: 'Error',
-          message: 'Tu navegador no soporta la función de compartir',
-          type: 'error',
+          title: "Error",
+          message: "Tu navegador no soporta la función de compartir",
+          type: "error",
         });
       }
     },
@@ -749,7 +951,7 @@ export default {
         this.renderImage();
         setTimeout(() => {
           const canvas = this.$refs.canvas;
-          this.imageFinal = canvas.toDataURL('image/jpeg', 1);
+          this.imageFinal = canvas.toDataURL("image/jpeg", 1);
           this.loading = false;
         }, 1000);
       }, 1000);
@@ -758,12 +960,14 @@ export default {
     async getBrands() {
       try {
         this.loading = true;
-        const url =  this.url_ajax+'/modules/advertising_generator/ajax.php';
-        const response = await axios.get(`${url}?action=get_data_brands&token=1234567890`);
+        const url = this.url_ajax + "/modules/advertising_generator/ajax.php";
+        const response = await axios.get(
+          `${url}?action=get_data_brands&token=1234567890`
+        );
         // console.log(response.data);
         this.brandsOptions = response.data.list_brands;
       } catch (error) {
-        console.error('Error al realizar la solicitud POST:', error);
+        console.error("Error al realizar la solicitud POST:", error);
       } finally {
         this.loading = false;
       }
@@ -772,12 +976,15 @@ export default {
     async getDataBrand() {
       try {
         this.loading = true;
-        const url = this.url_ajax+'/modules/advertising_generator/ajax.php';
-        const response = await axios.get(`${url}?action=get_data_brand&id_brand=${this.brandSelected}&token=1234567890`);
-        // console.log(response.data);
+        const url = this.url_ajax + "/modules/advertising_generator/ajax.php";
+        const response = await axios.get(
+          `${url}?action=get_data_brand&id_brand=${this.brandSelected}&token=1234567890`
+        );
         this.typeProduct = response.data.list_products;
+        // Reset Select Type Product (Case before product selected)
+        this.typeProductSelected = "";
       } catch (error) {
-        console.error('Error al realizar la solicitud GET:', error);
+        console.error("Error al realizar la solicitud GET:", error);
       } finally {
         this.loading = false;
       }
@@ -786,14 +993,13 @@ export default {
     async getPropsBrand(typeProduct) {
       try {
         this.loading = true;
-        const url = this.url_ajax+'/modules/advertising_generator/ajax.php';
-        const response = await axios.get(`${url}?action=get_props_product&id=${typeProduct}&token=1234567890`);
-        // console.log(response.data);
+        const url = this.url_ajax + "/modules/advertising_generator/ajax.php";
+        const response = await axios.get(
+          `${url}?action=get_props_product&id=${typeProduct}&token=1234567890`
+        );
         this.backgroundOptions = response.data.list_props;
-
-        // console.log(this.typeProductSelected);
       } catch (error) {
-        console.error('Error al realizar la solicitud GET:', error);
+        console.error("Error al realizar la solicitud GET:", error);
       } finally {
         this.loading = false;
       }
@@ -801,13 +1007,17 @@ export default {
   },
   computed: {
     selectedImageUrl() {
-      const selectedOption = this.brandsOptions.find(option => option.value === this.brandSelected);
-      return selectedOption ? selectedOption.imageUrl : '';
+      const selectedOption = this.brandsOptions.find(
+        (option) => option.value === this.brandSelected
+      );
+      return selectedOption ? selectedOption.imageUrl : "";
     },
 
     isMobile() {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
     },
-  }
+  },
 };
 </script>
