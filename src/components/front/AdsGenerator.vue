@@ -521,9 +521,9 @@ import { ElNotification } from "element-plus";
 export default {
   data() {
     return {
-      // url_ajax: '',
+      url_ajax: '',
       // url_ajax: "https://centraldeganadores.com",
-      url_ajax: "https://centralganadores.test",
+      // url_ajax: "https://centralganadores.test",
 
       loading: false,
 
