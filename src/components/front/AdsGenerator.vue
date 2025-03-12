@@ -131,7 +131,10 @@
           </div>
           <div class="input-ads">
             <span class="label">Palabra de invitación</span>
-            <small>La palabra de invitación no debe ser mayor a 20 caracteres, ejemplo [Llevate, Compra, oferta]</small>
+            <small
+              >La palabra de invitación no debe ser mayor a 20 caracteres,
+              ejemplo [Llevate, Compra, oferta]</small
+            >
             <el-input
               size="large"
               v-model="textTitle"
@@ -521,7 +524,7 @@ import { ElNotification } from "element-plus";
 export default {
   data() {
     return {
-      url_ajax: '',
+      url_ajax: "",
       // url_ajax: "https://centralganadores.test",
 
       loading: false,
@@ -630,13 +633,12 @@ export default {
         this.settingPriceValue = data_props.price_value;
         this.settingCommerce = data_props.commerce;
         this.settingValidity = data_props.validity_dates;
-  
+
         this.renderImage();
       } else {
         this.backgroundImage = "";
         this.changeTypeProduct();
       }
-      
     },
     // render watch
     textTitle: "renderImage",
@@ -732,9 +734,8 @@ export default {
     },
     valdiateStep1() {
       if (this.step === 1) {
-        this.isValid1 =
-          this.brandSelectedImg !== "";
-          // &&  this.promoSelected !== ''
+        this.isValid1 = this.brandSelectedImg !== "";
+        // &&  this.promoSelected !== ''
       }
     },
 
@@ -762,7 +763,7 @@ export default {
       }
     },
 
-    validateDataProps(props) {      
+    validateDataProps(props) {
       if (
         props.title !== undefined &&
         props.qty !== undefined &&
@@ -772,7 +773,7 @@ export default {
         props.price_after_label !== undefined &&
         props.price_after_value !== undefined &&
         props.price_label !== undefined &&
-        props.price_value !== undefined 
+        props.price_value !== undefined
       ) {
         return true;
       } else {
@@ -820,52 +821,52 @@ export default {
         // Usar las dimensiones especificadas
         maxWidth = setting.widthBox;
         let targetHeight = setting.heightBox;
-        
+
         // Función para calcular el texto con un tamaño de fuente dado
         const calculateTextSize = (testFontSize) => {
           context.font = `${fontWeight} ${testFontSize}px ${fontFamily}`;
           let testLineHeight = testFontSize * 1.2; // Proporción para lineHeight
-          
-          let testWords = text.split(' ');
-          let testLine = '';
+
+          let testWords = text.split(" ");
+          let testLine = "";
           let testLines = [];
-          
+
           for (let n = 0; n < testWords.length; n++) {
-            const tempLine = testLine + testWords[n] + ' ';
+            const tempLine = testLine + testWords[n] + " ";
             const metrics = context.measureText(tempLine);
             const tempWidth = metrics.width;
-            
+
             if (tempWidth > maxWidth && n > 0) {
               testLines.push(testLine);
-              testLine = testWords[n] + ' ';
+              testLine = testWords[n] + " ";
             } else {
               testLine = tempLine;
             }
           }
-          
+
           testLines.push(testLine);
           let totalHeight = testLines.length * testLineHeight;
-          
+
           return {
             height: totalHeight,
             lines: testLines,
-            lineHeight: testLineHeight
+            lineHeight: testLineHeight,
           };
         };
-        
+
         // Búsqueda binaria para encontrar el tamaño de fuente óptimo
         let minFontSize = 8; // Tamaño mínimo legible
         let maxFontSize = 72; // Tamaño máximo razonable
         let optimalSize = fontSize; // Comenzar con el tamaño proporcionado
         let result = calculateTextSize(optimalSize);
-        
+
         // Solo realizar ajustes si el texto no cabe en las dimensiones dadas
         if (result.height > targetHeight) {
           // Reducir tamaño si es demasiado grande
           while (minFontSize <= maxFontSize) {
             let midFontSize = Math.floor((minFontSize + maxFontSize) / 2);
             result = calculateTextSize(midFontSize);
-            
+
             if (result.height <= targetHeight) {
               optimalSize = midFontSize;
               minFontSize = midFontSize + 1;
@@ -878,7 +879,7 @@ export default {
           while (minFontSize <= maxFontSize) {
             let midFontSize = Math.floor((minFontSize + maxFontSize) / 2);
             result = calculateTextSize(midFontSize);
-            
+
             if (result.height <= targetHeight) {
               optimalSize = midFontSize;
               minFontSize = midFontSize + 1;
@@ -887,27 +888,27 @@ export default {
             }
           }
         }
-        
+
         // Aplicar el tamaño óptimo encontrado
         fontSize = optimalSize;
         lineHeight = result.lineHeight;
       }
 
       context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-      context.textBaseline = 'top'; // Cambiado a 'top' para mejor alineación
+      context.textBaseline = "top"; // Cambiado a 'top' para mejor alineación
 
-      let words = text.split(' ');
-      let line = '';
+      let words = text.split(" ");
+      let line = "";
       let lines = [];
 
       for (let n = 0; n < words.length; n++) {
-        const testLine = line + words[n] + ' ';
+        const testLine = line + words[n] + " ";
         const metrics = context.measureText(testLine);
         const testWidth = metrics.width;
-        
+
         if (testWidth > maxWidth && n > 0) {
           lines.push(line);
-          line = words[n] + ' ';
+          line = words[n] + " ";
         } else {
           line = testLine;
         }
@@ -929,10 +930,13 @@ export default {
       }
 
       // Dibujar la línea de decoración si es necesario
-      if (decoration === 'line-through') {
+      if (decoration === "line-through") {
         context.beginPath(); // Necesario para iniciar un nuevo trazo
-        context.moveTo(x, y + verticalOffset + (lineHeight / 2)); // Ajustado con el offset vertical
-        context.lineTo(x + context.measureText(line).width, y + verticalOffset + (lineHeight / 2));
+        context.moveTo(x, y + verticalOffset + lineHeight / 2); // Ajustado con el offset vertical
+        context.lineTo(
+          x + context.measureText(line).width,
+          y + verticalOffset + lineHeight / 2
+        );
         context.strokeStyle = color;
         context.lineWidth = 5;
         context.stroke();
@@ -951,7 +955,7 @@ export default {
         minimumFractionDigits: 0,
       });
 
-      return valueFormat.replace(/\s/g, '');
+      return valueFormat.replace(/\s/g, "");
     },
     downloadImage() {
       const canvas = this.$refs.canvas;
