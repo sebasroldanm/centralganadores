@@ -522,7 +522,6 @@ export default {
   data() {
     return {
       url_ajax: '',
-      // url_ajax: "https://centraldeganadores.com",
       // url_ajax: "https://centralganadores.test",
 
       loading: false,
@@ -717,7 +716,7 @@ export default {
         this.drawText(context, this.textCommerce, this.settingCommerce);
 
         // Fechas de vigencia
-        let validityPromo = `Aplica durante el ${this.dateStart} hasta el ${this.dateEnd}`;
+        let validityPromo = `Vigencia ${this.dateStart} hasta ${this.dateEnd}`;
         this.drawText(context, validityPromo, this.settingValidity);
       };
 
@@ -806,11 +805,10 @@ export default {
      * @param {string} color - The color of the text.
      * @param {string} fontFamily - The font family of the text.
      */
-
     drawText(context, text, setting) {
       let x = setting.positionX;
       let y = setting.positionY;
-      let width = setting.maxWidth;
+      let maxWidth = setting.maxWidth;
       let color = setting.color;
       let fontFamily = setting.fontFamily;
       let fontSize = setting.fontSize;
@@ -818,51 +816,126 @@ export default {
       let fontWeight = setting.fontWeight;
       let decoration = setting.decoration;
 
-      if (setting.qtyTextBreak) {
-        const qytText = text.length;
-        if (qytText < 16) {
-          fontSize = 90;
-          lineHeight = 80;
-        } else if (qytText >= 16 && qytText < 22) {
-          fontSize = 80;
-          lineHeight = 70;
-        } else if (qytText >= 22 && qytText < 28) {
-          fontSize = 70;
-          lineHeight = 60;
-        } else if (qytText >= 28 && qytText < 34) {
-          fontSize = 60;
-          lineHeight = 50;
+      if (setting.heightBox !== undefined && setting.widthBox !== undefined) {
+        // Usar las dimensiones especificadas
+        maxWidth = setting.widthBox;
+        let targetHeight = setting.heightBox;
+        
+        // Función para calcular el texto con un tamaño de fuente dado
+        const calculateTextSize = (testFontSize) => {
+          context.font = `${fontWeight} ${testFontSize}px ${fontFamily}`;
+          let testLineHeight = testFontSize * 1.2; // Proporción para lineHeight
+          
+          let testWords = text.split(' ');
+          let testLine = '';
+          let testLines = [];
+          
+          for (let n = 0; n < testWords.length; n++) {
+            const tempLine = testLine + testWords[n] + ' ';
+            const metrics = context.measureText(tempLine);
+            const tempWidth = metrics.width;
+            
+            if (tempWidth > maxWidth && n > 0) {
+              testLines.push(testLine);
+              testLine = testWords[n] + ' ';
+            } else {
+              testLine = tempLine;
+            }
+          }
+          
+          testLines.push(testLine);
+          let totalHeight = testLines.length * testLineHeight;
+          
+          return {
+            height: totalHeight,
+            lines: testLines,
+            lineHeight: testLineHeight
+          };
+        };
+        
+        // Búsqueda binaria para encontrar el tamaño de fuente óptimo
+        let minFontSize = 8; // Tamaño mínimo legible
+        let maxFontSize = 72; // Tamaño máximo razonable
+        let optimalSize = fontSize; // Comenzar con el tamaño proporcionado
+        let result = calculateTextSize(optimalSize);
+        
+        // Solo realizar ajustes si el texto no cabe en las dimensiones dadas
+        if (result.height > targetHeight) {
+          // Reducir tamaño si es demasiado grande
+          while (minFontSize <= maxFontSize) {
+            let midFontSize = Math.floor((minFontSize + maxFontSize) / 2);
+            result = calculateTextSize(midFontSize);
+            
+            if (result.height <= targetHeight) {
+              optimalSize = midFontSize;
+              minFontSize = midFontSize + 1;
+            } else {
+              maxFontSize = midFontSize - 1;
+            }
+          }
+        } else if (result.height < targetHeight * 0.8) {
+          // Aumentar tamaño si hay mucho espacio disponible
+          while (minFontSize <= maxFontSize) {
+            let midFontSize = Math.floor((minFontSize + maxFontSize) / 2);
+            result = calculateTextSize(midFontSize);
+            
+            if (result.height <= targetHeight) {
+              optimalSize = midFontSize;
+              minFontSize = midFontSize + 1;
+            } else {
+              maxFontSize = midFontSize - 1;
+            }
+          }
         }
-        // console.log(qytText);
+        
+        // Aplicar el tamaño óptimo encontrado
+        fontSize = optimalSize;
+        lineHeight = result.lineHeight;
       }
 
       context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-      context.fillStyle = color;
+      context.textBaseline = 'top'; // Cambiado a 'top' para mejor alineación
 
-      let words = text.split(" ");
-      let line = "";
+      let words = text.split(' ');
+      let line = '';
+      let lines = [];
 
       for (let n = 0; n < words.length; n++) {
-        const testLine = line + words[n] + " ";
+        const testLine = line + words[n] + ' ';
         const metrics = context.measureText(testLine);
         const testWidth = metrics.width;
-        if (testWidth > width && n > 0) {
-          context.fillText(line, x, y);
-          line = words[n] + " ";
-          y += lineHeight;
+        
+        if (testWidth > maxWidth && n > 0) {
+          lines.push(line);
+          line = words[n] + ' ';
         } else {
           line = testLine;
         }
       }
 
-      context.fillText(line, x, y);
+      lines.push(line);
+      const textHeight = lines.length * lineHeight;
 
-      if (decoration === "line-through") {
-        context.moveTo(x, y - fontSize / 2.5); // Coloca la línea arriba del texto
-        context.lineTo(x + context.measureText(line).width, y - fontSize / 2.5); // Coloca la línea al final del texto
-        context.strokeStyle = color; // Usa el mismo color del texto
+      // Calcular el desplazamiento vertical para centrar el texto si hay heightBox
+      let verticalOffset = 0;
+      if (setting.heightBox) {
+        verticalOffset = (setting.heightBox - textHeight) / 2;
+      }
+
+      // Dibujar el texto línea por línea, con el desplazamiento vertical para centrar
+      context.fillStyle = color;
+      for (let i = 0; i < lines.length; i++) {
+        context.fillText(lines[i], x, y + verticalOffset + i * lineHeight);
+      }
+
+      // Dibujar la línea de decoración si es necesario
+      if (decoration === 'line-through') {
+        context.beginPath(); // Necesario para iniciar un nuevo trazo
+        context.moveTo(x, y + verticalOffset + (lineHeight / 2)); // Ajustado con el offset vertical
+        context.lineTo(x + context.measureText(line).width, y + verticalOffset + (lineHeight / 2));
+        context.strokeStyle = color;
         context.lineWidth = 5;
-        context.stroke(); // Dibuja la línea
+        context.stroke();
       }
     },
     formatCurrency(number) {
@@ -878,7 +951,7 @@ export default {
         minimumFractionDigits: 0,
       });
 
-      return valueFormat;
+      return valueFormat.replace(/\s/g, '');
     },
     downloadImage() {
       const canvas = this.$refs.canvas;
