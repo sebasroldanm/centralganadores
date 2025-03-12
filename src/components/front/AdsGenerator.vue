@@ -607,6 +607,17 @@ export default {
       this.brandSelectedImg = selected.imageUrl;
       this.getDataBrand();
     },
+
+    /**
+     * When the user selects a new background image, this watcher function is
+     * called. It gets the props of the background image and validates if they
+     * exist. If they do, it updates the settings and calls the renderImage
+     * function to update the image. If the props do not exist, it resets the
+     * background image and calls the changeTypeProduct function to reset the
+     * type product as well.
+     *
+     * @param {string} newValue - the id of the selected background image
+     */
     backgroundSelected(newValue) {
       const selected = this.backgroundOptions.find(
         (option) => option.id === newValue
@@ -658,6 +669,17 @@ export default {
     promoSelected: "valdiateStep1",
   },
   methods: {
+    /**
+     * Esta función convierte una imagen en un Canvas basado en la configuración de la
+     * Componente.Utiliza la imagen de fondo seleccionada por el usuario y dibuja
+     * El texto sobre él de acuerdo con la configuración.El texto a dibujar es el
+     * Título de la promoción, la cantidad de productos, la descripción del
+     * producto, el precio de la promoción, la unidad de precios, el comercio y el
+     * Fechas de validez de la promoción.Si el precio antes y después existe,
+     * Los dibuja también.Si no, solo dibuja la unidad de precio.Finalmente,
+     * Valida la forma del segundo paso.
+     * @function renderImage
+     */
     renderImage() {
       const canvas = this.$refs.canvas;
       const context = canvas.getContext("2d");
@@ -791,21 +813,27 @@ export default {
     },
 
     /**
-     * Draws text on a canvas context with specified settings.
+     * Dibuja texto en el Canvas especificado utilizando la configuración dada.
+     * Admite calcular el tamaño de fuente óptimo para que se ajuste dentro de las dimensiones especificadas
+     * y puede dibujar texto con saltos de línea si es necesario.El texto también se puede centrar
+     * Verticalmente dentro de una altura de caja especificada.
      *
-     * @param {CanvasRenderingContext2D} context - The canvas context to draw on.
-     * @param {string} text - The text to draw.
-     * @param {object} setting - The settings for the text.
-     * @param {string} setting.positionX - The x-coordinate of the starting position of the text.
-     * @param {string} setting.positionY - The y-coordinate of the starting position of the text.
-     * @param {string} setting.maxWidth - The maximum width of the text.
-     * @param {string} setting.fontSize - The font size of the text.
-     * @param {string} setting.lineHeight - The line height of the text.
-     * @param {string} setting.fontWeight - The font weight of the text.
-     * @param {string} setting.decoration - The decoration of the text (e.g. 'line-through').
-     * @param {string} color - The color of the text.
-     * @param {string} fontFamily - The font family of the text.
+     * @param {CanvasRenderingContext2D} context - El Canvas para recurrir.
+     * @param {string} text - El texto a dibujar.
+     * @param {Object} setting - La configuración para dibujar el texto.
+     * @param {number} setting.positionX - La coordenada X para la posición de texto.
+     * @param {number} setting.positionY - La coordenada y para la posición del texto.
+     * @param {number} setting.maxWidth - El ancho máximo para el texto.
+     * @param {string} setting.color - El color del texto.
+     * @param {string} setting.fontFamily - La familia de fuentes del texto.
+     * @param {number} setting.fontSize - El tamaño de fuente inicial para el texto.
+     * @param {number} setting.lineHeight - La altura de la línea para el texto.
+     * @param {string} setting.fontWeight - El peso de la fuente del texto.
+     * @param {string} setting.decoration - El estilo de decoración (por ejemplo, "Línea a través").
+     * @param {number} [setting.widthBox] - El ancho del cuadro para ajustar el texto en, si se especifica.
+     * @param {number} [setting.heightBox] - La altura del cuadro para ajustar el texto, si se especifica.
      */
+
     drawText(context, text, setting) {
       let x = setting.positionX;
       let y = setting.positionY;
@@ -1018,6 +1046,14 @@ export default {
       }
     },
 
+    /**
+     * Recarga la imagen final en el canvas y la asigna a this.imageFinal.
+     * Primero, pone el texto de la promoción en 0 y dibuja el canvas,
+     * luego regresa el texto a su valor original y vuelve a dibujar el canvas.
+     * Finalmente, asigna la imagen final a this.imageFinal y quita el loader.
+     * Este método es necesario para que el canvas se actualice correctamente
+     * luego de cambiar el texto de la promoción.
+     */
     async reloadImage() {
       this.loading = true;
       var backTextPromo = this.textPromo;
