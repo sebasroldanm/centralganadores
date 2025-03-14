@@ -524,8 +524,8 @@ import { ElNotification } from "element-plus";
 export default {
   data() {
     return {
-      url_ajax: "",
-      // url_ajax: "https://centralganadores.test",
+      // url_ajax: "",
+      url_ajax: "https://centralganadores.test",
 
       loading: false,
 
@@ -598,7 +598,7 @@ export default {
   },
   watch: {
     typeProductSelected(newValue) {
-      this.typeProductSelectedLabel = newValue.displayText;
+      this.typeProductSelectedLabel = newValue.label;
     },
     brandSelected(newValue) {
       const selected = this.brandsOptions.find(
@@ -609,12 +609,12 @@ export default {
     },
 
     /**
-     * When the user selects a new background image, this watcher function is
-     * called. It gets the props of the background image and validates if they
-     * exist. If they do, it updates the settings and calls the renderImage
-     * function to update the image. If the props do not exist, it resets the
-     * background image and calls the changeTypeProduct function to reset the
-     * type product as well.
+     * Cuando el usuario selecciona una nueva imagen de fondo, esta función del observador es
+     * llamado.Obtiene los accesorios de la imagen de fondo y se valida si
+     * existir.Si lo hacen, actualiza la configuración y llama a RenderImage
+     * Función para actualizar la imagen.Si los accesorios no existen, restablece el
+     * Imagen de fondo y llama a la función ChangeTypRroduct para restablecer la
+     * Tipo de producto también.
      *
      * @param {string} newValue - the id of the selected background image
      */
@@ -838,13 +838,15 @@ export default {
       let x = setting.positionX;
       let y = setting.positionY;
       let maxWidth = setting.maxWidth;
+      let fontSize = setting.fontSize;
       let color = setting.color;
       let fontFamily = setting.fontFamily;
-      let fontSize = setting.fontSize;
       let lineHeight = setting.lineHeight;
       let fontWeight = setting.fontWeight;
       let decoration = setting.decoration;
+      let calculatedLines = null;
 
+      // Verificar si debemos ajustar el texto a dimensiones específicas
       if (setting.heightBox !== undefined && setting.widthBox !== undefined) {
         // Usar las dimensiones especificadas
         maxWidth = setting.widthBox;
@@ -858,97 +860,109 @@ export default {
           let testWords = text.split(" ");
           let testLine = "";
           let testLines = [];
+          let maxLineWidth = 0;
 
           for (let n = 0; n < testWords.length; n++) {
-            const tempLine = testLine + testWords[n] + " ";
-            const metrics = context.measureText(tempLine);
-            const tempWidth = metrics.width;
+            let testWord = testWords[n] + " ";
+            let tempLine = testLine + testWord;
+            let metrics = context.measureText(tempLine);
+            let tempWidth = metrics.width;
 
-            if (tempWidth > maxWidth && n > 0) {
-              testLines.push(testLine);
-              testLine = testWords[n] + " ";
+            if (tempWidth > maxWidth && testLine !== "") {
+              // Registrar el ancho máximo de línea que hemos encontrado
+              maxLineWidth = Math.max(
+                maxLineWidth,
+                context.measureText(testLine).width
+              );
+              testLines.push(testLine.trim());
+              testLine = testWord;
             } else {
               testLine = tempLine;
             }
           }
 
-          testLines.push(testLine);
+          // No olvidar la última línea
+          if (testLine.trim() !== "") {
+            maxLineWidth = Math.max(
+              maxLineWidth,
+              context.measureText(testLine.trim()).width
+            );
+            testLines.push(testLine.trim());
+          }
+
           let totalHeight = testLines.length * testLineHeight;
 
           return {
             height: totalHeight,
+            width: maxLineWidth,
             lines: testLines,
             lineHeight: testLineHeight,
+            fontSize: testFontSize,
+            fitsWidth: maxLineWidth <= maxWidth,
+            fitsHeight: totalHeight <= targetHeight,
           };
         };
 
         // Búsqueda binaria para encontrar el tamaño de fuente óptimo
         let minFontSize = 8; // Tamaño mínimo legible
-        let maxFontSize = 72; // Tamaño máximo razonable
-        let optimalSize = fontSize; // Comenzar con el tamaño proporcionado
-        let result = calculateTextSize(optimalSize);
+        let maxFontSize = 100; // Tamaño máximo razonable
+        let optimalResult = null;
 
-        // Solo realizar ajustes si el texto no cabe en las dimensiones dadas
-        if (result.height > targetHeight) {
-          // Reducir tamaño si es demasiado grande
-          while (minFontSize <= maxFontSize) {
-            let midFontSize = Math.floor((minFontSize + maxFontSize) / 2);
-            result = calculateTextSize(midFontSize);
+        // Realizar una búsqueda binaria para encontrar el tamaño máximo que cabe
+        while (minFontSize <= maxFontSize) {
+          let midFontSize = Math.floor((minFontSize + maxFontSize) / 2);
+          let result = calculateTextSize(midFontSize);
 
-            if (result.height <= targetHeight) {
-              optimalSize = midFontSize;
-              minFontSize = midFontSize + 1;
-            } else {
-              maxFontSize = midFontSize - 1;
-            }
-          }
-        } else if (result.height < targetHeight * 0.8) {
-          // Aumentar tamaño si hay mucho espacio disponible
-          while (minFontSize <= maxFontSize) {
-            let midFontSize = Math.floor((minFontSize + maxFontSize) / 2);
-            result = calculateTextSize(midFontSize);
-
-            if (result.height <= targetHeight) {
-              optimalSize = midFontSize;
-              minFontSize = midFontSize + 1;
-            } else {
-              maxFontSize = midFontSize - 1;
-            }
+          if (result.fitsWidth && result.fitsHeight) {
+            // Si cabe, guardamos este resultado y buscamos un tamaño mayor
+            optimalResult = result;
+            minFontSize = midFontSize + 1;
+          } else {
+            // Si no cabe, buscamos un tamaño menor
+            maxFontSize = midFontSize - 1;
           }
         }
 
+        // Si no encontramos un tamaño óptimo, usar el tamaño mínimo
+        if (!optimalResult) {
+          optimalResult = calculateTextSize(8); // Usar el tamaño mínimo como último recurso
+        }
+
         // Aplicar el tamaño óptimo encontrado
-        fontSize = optimalSize;
-        lineHeight = result.lineHeight;
+        fontSize = optimalResult.fontSize;
+        lineHeight = optimalResult.lineHeight;
+        calculatedLines = optimalResult.lines;
       }
 
       context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
       context.textBaseline = "top"; // Cambiado a 'top' para mejor alineación
 
-      let words = text.split(" ");
-      let line = "";
-      let lines = [];
+      // Usar las líneas calculadas si están disponibles, de lo contrario calcularlas aquí
+      let lines = calculatedLines || [];
+      if (!lines.length) {
+        let words = text.split(" ");
+        let line = "";
+        for (let n = 0; n < words.length; n++) {
+          const testLine = line + words[n] + " ";
+          const metrics = context.measureText(testLine);
+          const testWidth = metrics.width;
 
-      for (let n = 0; n < words.length; n++) {
-        const testLine = line + words[n] + " ";
-        const metrics = context.measureText(testLine);
-        const testWidth = metrics.width;
-
-        if (testWidth > maxWidth && n > 0) {
-          lines.push(line);
-          line = words[n] + " ";
-        } else {
-          line = testLine;
+          if (testWidth > maxWidth && n > 0) {
+            lines.push(line);
+            line = words[n] + " ";
+          } else {
+            line = testLine;
+          }
         }
+        lines.push(line);
       }
 
-      lines.push(line);
       const textHeight = lines.length * lineHeight;
 
       // Calcular el desplazamiento vertical para centrar el texto si hay heightBox
       let verticalOffset = 0;
       if (setting.heightBox) {
-        verticalOffset = (setting.heightBox - textHeight) / 2;
+        verticalOffset = Math.max(0, (setting.heightBox - textHeight) / 2);
       }
 
       // Dibujar el texto línea por línea, con el desplazamiento vertical para centrar
@@ -960,11 +974,9 @@ export default {
       // Dibujar la línea de decoración si es necesario
       if (decoration === "line-through") {
         context.beginPath(); // Necesario para iniciar un nuevo trazo
+        const lineWidth = context.measureText(lines[0]).width; // Usar la primera línea como referencia
         context.moveTo(x, y + verticalOffset + lineHeight / 2); // Ajustado con el offset vertical
-        context.lineTo(
-          x + context.measureText(line).width,
-          y + verticalOffset + lineHeight / 2
-        );
+        context.lineTo(x + lineWidth, y + verticalOffset + lineHeight / 2);
         context.strokeStyle = color;
         context.lineWidth = 5;
         context.stroke();
